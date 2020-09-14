@@ -3,6 +3,8 @@ package com.example.trackerapp.ui.fragments
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -25,9 +27,14 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.PolylineOptions
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_tracking.*
+import kotlinx.android.synthetic.main.fragment_tracking.btnFinishRun
+import kotlinx.android.synthetic.main.fragment_tracking.btnToggleRun
+import kotlinx.android.synthetic.main.fragment_tracking.tvTimer
+import kotlinx.android.synthetic.main.presistent_button_sheet.*
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
@@ -41,6 +48,7 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
     private var pathPoints = mutableListOf<Polyline>()
     private var currentTimeMillis = 0L
     private var menu: Menu? = null
+    lateinit var bottomSheetBehavior: BottomSheetBehavior<CardView>
 
     @set:Inject
     var weight = 80f
@@ -57,6 +65,8 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mapView.onCreate(savedInstanceState)
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
         tvTimer.text = "00:00:00:00"
         btnToggleRun.setOnClickListener {
             toggleRun()

@@ -10,11 +10,23 @@ import com.bumptech.glide.Glide
 import com.example.trackerapp.R
 import com.example.trackerapp.db.Run
 import com.example.trackerapp.other.TrackingUtility
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.item_run.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class RunAdapter() : RecyclerView.Adapter<RunAdapter.RunViewHolder>() {
+
+class RunAdapter(listener: OnListInteractionListener) :
+    RecyclerView.Adapter<RunAdapter.RunViewHolder>() {
+
+
+    interface OnListInteractionListener {
+        fun onListInteraction(run: Run)
+    }
+
+    private val mListener: OnListInteractionListener = listener
+
+
     inner class RunViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
     private val diffCallback = object : DiffUtil.ItemCallback<Run>() {
@@ -63,6 +75,21 @@ class RunAdapter() : RecyclerView.Adapter<RunAdapter.RunViewHolder>() {
 
             val caloriesBurned = "${run.caloriesBurned}kcal"
             tvCalories.text = caloriesBurned
+
+
+            setOnLongClickListener {
+                val dialog = MaterialAlertDialogBuilder(it.context, R.style.AlertDialogTheme)
+                    .setTitle("delete the run ?")
+                    .setMessage("Are you sure")
+                    .setPositiveButton("Yes") { _, _ ->
+                        mListener.onListInteraction(run)
+                    }
+                    .setNegativeButton("No") { dialog, _ ->
+                        dialog.cancel()
+                    }
+                dialog.show()
+                return@setOnLongClickListener true
+            }
         }
     }
 
