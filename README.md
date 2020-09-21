@@ -4,11 +4,10 @@ Kotlin \
 MVVM \
 Coroutines\
 Repository pattern \
-Forground service\
+Foreground service\
 Navigation Components (Single activity multiple fragment)\
 Google map api \
 Dagger Hilt \
-Coroutines\
 Notifications\
 Room db\
 Glide\
